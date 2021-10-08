@@ -1,10 +1,9 @@
 from rest_framework import serializers
+from goods.models import Product
 
 
-class ProductListCustomerSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField()
-    count = serializers.IntegerField()
 
+class ProductListCustomerSerializer(serializers.ModelSerializer):
     class Meta:
-        read_only_fields = ["id", "title", "count"]
+        model = Product
+        fields = ['id', "title", "description", "quantity", "price"]
