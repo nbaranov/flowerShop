@@ -2,6 +2,11 @@ from django.db import models
 
 # TODO use real model
 
+class Flower(models.Model):
+
+
+
+
 class Product:
     @staticmethod
     def all():
