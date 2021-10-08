@@ -1,29 +1,13 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 
-# TODO use real model
+class Product(models.Model):
+    title = models.CharField(max_length=64)
+    description = models.CharField(max_length=1024)
+    quantity = models.IntegerField(validators=[MinValueValidator(0)])
+    price = models.FloatField(validators=[MinValueValidator(0.0)])
 
-class Flower(models.Model):
 
+    def __str__(self):
+        return f"{self.title}"
 
-
-
-class Product:
-    @staticmethod
-    def all():
-        return [
-            {
-                "id": 1,
-                "title": "Test Product",
-                "count": 100,
-            },
-            {
-                "id": 2,
-                "title": "Flower",
-                "count": 2,
-            },
-            {
-                "id": 3,
-                "title": "Car",
-                "count": 0,
-            },
-        ]
