@@ -6,7 +6,8 @@ from goods.models import Product
 from goods.serializers import ProductListCustomerSerializer 
 
 class PaginatorAPI(PageNumberPagination):
-    page_size = 2
+    page_size_query_param = "page_size"
+    max_page_size = 100
 
 
 class ProductList(APIView):
