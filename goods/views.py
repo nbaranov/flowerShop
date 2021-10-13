@@ -1,6 +1,9 @@
-from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from goods.models import Product
 from goods.serializers import ProductListCustomerSerializer 
@@ -10,11 +13,10 @@ class PaginatorAPI(PageNumberPagination):
     max_page_size = 100
 
 
-class ProductList(APIView):
-    def get(self, request):
-        products = Product.objects.all()
-        paginated_page = PaginatorAPI().paginate_queryset(products, request)
-        serializer = ProductListCustomerSerializer(paginated_page, many=True)
-        
-        return Response(serializer.data)
-
+class ProductList(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductListCustomerSerializer
+    pagination_class = PaginatorAPI
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['title']
+    search_fields = ['title', 'description']
