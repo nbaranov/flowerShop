@@ -18,4 +18,4 @@ class Favorite(models.Model):
     products = models.ManyToManyField(Product)
 
     def __str__(self):
-        return f"{self.user}: {self.products.all()}"
+        return f"{self.user}"
