@@ -9,6 +9,7 @@ python = "^3.8"
 Django = "^3.2.8"
 djangorestframework = "^3.12.4"
 django-filter = "^21.1"
+openpyxl = "^3.0.9"
 
 [tool.poetry.dev-dependencies]
 
