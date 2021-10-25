@@ -8,8 +8,9 @@ from rest_framework.parsers import MultiPartParser
 
 
 from goods.models import Product
-from goods.serializers import ProductListCustomerSerializer 
-from goods.utils import read_excel
+from goods.serializers import ProductListCustomerSerializer
+from goods.services import ProductService
+from goods.utils import ExcelParser
 
 
 class PaginatorAPI(PageNumberPagination):
@@ -26,17 +27,13 @@ class ProductList(ListAPIView):
     search_fields = ['title', 'description']
 
 
-class ProductImportFromFile(APIView):
+class ProductImportFromExcelFile(APIView):
     parser_classes = [MultiPartParser]
 
-    def post(self, request, format=None):
+    def post(self, request):
+        # todo проверить работоспособность
         file = request.FILES['file']
-        data_table = read_excel(file, number_of_cols=4)
-        for row in data_table:
-            product = Product.objects.create(title=row[0],
-                                             description=row[1],
-                                             quantity=row[2],
-                                             price=row[3])
-            product.save()
+        parser = ExcelParser()
+        ProductService.load_many_from_file(file, parser)
 
         return Response(status=204)
