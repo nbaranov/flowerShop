@@ -31,15 +31,12 @@ class ProductImportFromFile(APIView):
 
     def post(self, request, format=None):
         file = request.FILES['file']
-        print(file)
         data_table = read_excel(file, number_of_cols=4)
         for row in data_table:
-            product = Product.objects.create(title = row[0],
-                                             description = row[1],
-                                             quantity = row[2],
-                                             price = row[3])
+            product = Product.objects.create(title=row[0],
+                                             description=row[1],
+                                             quantity=row[2],
+                                             price=row[3])
             product.save()
-
-        
 
         return Response(status=204)
