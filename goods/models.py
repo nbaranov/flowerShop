@@ -9,7 +9,7 @@ class Product(models.Model):
     quantity = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     price = models.FloatField(validators=[MinValueValidator(0.0)], null=True, blank=True)
 
-    external_id = models.CharField(unique=True)
+    external_id = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
         return f"{self.title}"
