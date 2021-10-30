@@ -37,8 +37,7 @@ class CsvParser(Parser):
             if data_row[0] == '':  # проверяем не пустое ли поле External ID
                 continue
             else:
-                for col in range(len(data_row)):  # костыль чтобы title, quantity и price обявить в None. пустая строка = ошибка при добавлении
-                    if data_row[col] == '':
-                        data_row[col] = None
+                # костыль чтобы title, quantity и price обявить в None. пустая строка = ошибка при добавлении в db
+                data_row = [None if item == '' else item for item in data_row]
                 data_table.append(data_row)
         return data_table
