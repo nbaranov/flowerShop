@@ -4,6 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import GenericViewSet
@@ -56,3 +57,23 @@ class FavoriteViewSet(
     queryset = Favorite.objects.all()
     permission_classes = (IsProfileOwnerOrAdmin,)
     serializer_class = FavoriteListSerializer
+
+    def partial_update(self, request, pk=None):
+        db_favorite_data = self.queryset.get(user_id=request.user.pk)
+        for product_id in request.data['products']:
+            product = Product.objects.filter(id=product_id)
+            if product.exists():
+                product = product[0]
+                db_favorite_data.products.add(product)
+                db_favorite_data.save()
+            else:
+                raise ValueError(f'В БД нет продукта с id {product_id}')
+
+            db_products = db_favorite_data.products.all().values('id')
+            serialized_data = {
+                "user": db_favorite_data.serializable_value('user'),
+                "products": [item.get('id') for item in db_products]
+            }
+            serializer = FavoriteListSerializer(request.user, data=serialized_data, partial=True)
+
+        return Response(serializer.initial_data)
