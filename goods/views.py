@@ -52,11 +52,15 @@ class ProductImportFromFile(APIView):
 class FavoriteViewSet(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    GenericViewSet
+    GenericViewSet,
 ):
     queryset = Favorite.objects.all()
     permission_classes = (IsProfileOwnerOrAdmin,)
     serializer_class = FavoriteListSerializer
+
+    # todo подумать как удалить возможность замены избранного (put),
+    #  как следствие - отдельный эндпоинт для удаления из избранного
+    # todo методы для создания и удаления "избранного"
 
     def partial_update(self, request, pk=None):
         db_favorite_data = self.queryset.get(user_id=request.user.pk)
