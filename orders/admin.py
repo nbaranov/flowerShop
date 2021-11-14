@@ -1,5 +1,5 @@
 from django.contrib import admin
-from orders.models import Cart, ProductInCart
+from orders.models import Cart, CartItem
 
 admin.site.register(Cart)
-admin.site.register(ProductInCart)
+admin.site.register(CartItem)
